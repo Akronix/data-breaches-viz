@@ -1,9 +1,4 @@
 Entity,alternative name,records lost,YEAR,story,SECTOR,METHOD,interesting story,DATA SENSITIVITY,DISPLAYED RECORDS,,source name,1st source link,2nd source link
-,,"(use 3m, 4m, 5m or 10m to approximate unknown figures) ",year story broke,,,,,"1. Just email address/Online information 
-2 SSN/Personal details 
-3 Credit card information 
-4 Health & other personal records 
-5 Full details",,,,,
 Quora,,"100,000,000",2018,"Dec 2018. Compromised: logins for around 100m visitors who use the site to ask and answer questions about politics, faith, calculus, unrequited love, the meaning of life and more",web,hacked,,1,"100,000,000",,NY Times,https://www.nytimes.com/2018/12/04/technology/quora-hack-data-breach.html,
 Marriott Hotels,,"500,000,000",2018,"Nov 2018. Sensitive data on customer to all Starwood hotels (including Sheraton, Regis, W Hotels) leaked since 2014. Credit card details and some passport info.",retail,hacked,,4,"500,000,000",,NY Times,https://www.nytimes.com/2018/11/30/business/marriott-data-breach.html,
 NMBS,Belgian national railway operator,"1,460,000",2018,"Dec 2018. Data stored on a non-secure server, making it possible to access names, gender, DOB, email and postal address data of customers externally by means of a simple search engine query. Most of the data belong to customers in Belgium, France and the UK, including thousands of Commission and Parliament employees.  Caused, the NMBS said, by a data worker “clicking on the wrong button”.",transport,oops!,,2,,,Flanders Today,http://www.flanderstoday.eu/business/nmbs-data-leak-was-breach-privacy,
