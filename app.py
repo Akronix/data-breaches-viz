@@ -209,11 +209,22 @@ def make_main_figure(years):
 
     layout = {
         'title': 'Records lost',
-        #~ 'xaxis': {'range': years }
+        'xaxis': {'title': 'Entity',
+                    'titlefont': dict(
+                        family='Courier New, monospace',
+                        size=18,
+                        color='#7f7f7f'
+                )
+        },
+        'yaxis': {'title': 'Records lost',
+                    'titlefont': dict(
+                        family='Courier New, monospace',
+                        size=18,
+                        color='#7f7f7f'
+                )
+        }
     }
 
-
-    #~ traces.append(trace)
     figure = dict(data=[trace], layout=layout)
 
     return figure
