@@ -29,6 +29,7 @@ server = app.server
 
 ### Load data ###
 data = pd.read_csv('breaches_clean.csv', thousands= ',')
+data['SECTOR'] = data['SECTOR'].apply(lambda sector: sector.split(', ')) # create list of sectors
 # sort data by records lost
 #~ data = data['records lost'].sort_values(ascending=False)
 
@@ -45,12 +46,9 @@ method_options = [ { 'label': label, 'value': value} for label, value in zip(met
 
 sector_list = ['web', 'retail', 'transport', 'government', 'telecoms',
         'app', 'healthcare', 'tech', 'financial', 'legal', 'gaming', 'media',
-        'tech, app', 'academic', 'web, tech', 'energy', 'tech, web',
-        'government, healthcare', 'web, military', 'tech, retail',
-        'military', 'military, healthcare', 'web, gaming',
-        'government, military'] # all options in data
+        'academic', 'energy', 'military'] # all options in data
 sector_list.sort() #  Sort alphabetically
-sector_list.insert(0, 'all') # add 'all' options at the front
+sector_list.insert(0, 'all') # add 'all' options to the front
 sector_options = [ { 'label': sector, 'value': sector} for sector in sector_list ]
 
 
@@ -206,7 +204,7 @@ def update_year_text(year_slider):
                 Input('sector-select', 'value'),
             ]
     )
-def make_main_figure(methods, years, selected_sensitivity, selected_sector):
+def make_main_figure(methods, years, selected_sensitivities, selected_sector):
 
     # do a local copy of the data to not modify global data var
     local_data = data.copy(deep=True)
@@ -219,14 +217,14 @@ def make_main_figure(methods, years, selected_sensitivity, selected_sector):
     local_data = local_data[local_data['YEAR'].isin(list_years_set)]
 
     # data sensitivity dropdown
-    print(f'Data sensitivity selected: {selected_sensitivity}')
-    if selected_sensitivity != sensitivity_options:
-        local_data = local_data [ local_data['DATA SENSITIVITY'].apply( lambda sensitivity: sensitivity in selected_sensitivity ) ]
+    print(f'Data sensitivity selected: {selected_sensitivities}')
+    if selected_sensitivities != sensitivity_options:
+        local_data = local_data [ local_data['DATA SENSITIVITY'].apply( lambda sensitivity: sensitivity in selected_sensitivities ) ]
 
     # sector dropdown selection
     print(f'Sector selected: {selected_sector}')
     if selected_sector != 'all':
-        local_data = local_data [ local_data['SECTOR'] == selected_sector ]
+        local_data = local_data [ local_data['SECTOR'].apply( lambda sectors: selected_sector in sectors ) ]
 
 
     # methods graphs
