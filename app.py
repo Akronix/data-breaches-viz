@@ -93,12 +93,12 @@ app.layout = html.Div(
                 ),
                 html.H5(
                     '',
-                    id='years_text',
+                    id='years-text',
                     className='two columns',
                     style={'text-align': 'right'}
                 ),
             ],
-            className='row'
+            className='row container'
         ),
         html.Div(
             [
@@ -182,10 +182,10 @@ app.layout = html.Div(
 
 ### Callbacks ###
 # Slider -> year text
-#~ @app.callback(Output('year_text', 'children'),
-              #~ [Input('year_slider', 'value')])
-#~ def update_year_text(year_slider):
-    #~ return "{} | {}".format(year_slider[0], year_slider[1])
+@app.callback(Output('years-text', 'children'),
+              [Input('year-slider', 'value')])
+def update_year_text(year_slider):
+    return "{} | {}".format(year_slider[0], year_slider[1])
 
 
 @app.callback(Output('main-graph', 'figure'),
