@@ -200,6 +200,30 @@ def get_data_for_method (method: str, local_data: pd.DataFrame):
             raise Exception('method not found')
 
 
+def method_header(method_name: str, records_lost_no: int, companies_affected_no: int):
+    return html.Div(
+            [
+                html.H5(
+                    f'Data for method: "{method_name}"',
+                    className='four columns',
+                    style={'text-align': 'center'}
+                ),
+                html.H5(
+                    [html.Strong(records_lost_no),' records lost.'],
+                    className='four columns',
+                    style={'text-align': 'center'}
+                ),
+                html.H5(
+                    [html.Strong(companies_affected_no),' companies affected.'],
+                    #~ f'Total companies affected: "{companies_affected_no}"',
+                    className='four columns',
+                    style={'text-align': 'right'}
+                ),
+            ],
+            className='row container'
+        )
+
+
 ### Callbacks ###
 # Slider -> year text
 #~ @app.callback(Output('years-text', 'children'),
@@ -284,7 +308,7 @@ def make_main_figure(methods, years, selected_sensitivities, selected_sector):
         }
 
         figure = dict(data=[trace], layout=layout)
-        graphs.append(dcc.Graph(
+        dash_graph = dcc.Graph(
                         id=f"graph-{method_name}",
                         figure=figure,
                         config={
@@ -292,7 +316,17 @@ def make_main_figure(methods, years, selected_sensitivities, selected_sector):
                             'showLink': False,
                             'modeBarButtonsToRemove': ['sendDataToCloud']
                         }
-                    ))
+                    )
+
+        graphs.append(html.Div(
+            [
+                method_header(method_name, lost_data.sum(), len(lost_data)),
+                dash_graph,
+                html.Hr()
+            ],
+            style={'margin-bottom': '10'}
+        ))
+
 
     return graphs
 
