@@ -49,8 +49,11 @@ sector_options = [
 
 
 sensitivity_options = [
-    {'value': 1, 'label': 'Just email address/Online information' }
-
+    {'value': 1, 'label': 'Just email address/Online information' },
+    {'value': 2, 'label': 'SSN/Personal details' },
+    {'value': 3, 'label': 'Credit card information' },
+    {'value': 4, 'label': 'Health & other personal records' },
+    {'value': 5, 'label': 'Full details' },
 ]
 
 
@@ -113,63 +116,68 @@ app.layout = html.Div(
                     [
                         html.Div(
                             [
-                                html.P('Filter by data sensitivity:'),
-                                dcc.RadioItems(
-                                    id='data-sensitivity-selector',
-                                    options=[
-                                        {'label': 'All ', 'value': 'all'},
-                                        {'label': 'Active only ', 'value': 'active'},
-                                        {'label': 'Customize ', 'value': 'custom'}
+                                html.Div(
+                                    [
+                                        html.P('Filter by data sensitivity:'),
+                                        dcc.RadioItems(
+                                            id='data-sensitivity-selector',
+                                            options=[
+                                                {'label': 'All ', 'value': 'all'},
+                                                {'label': 'Active only ', 'value': 'active'},
+                                                {'label': 'Customize ', 'value': 'custom'}
+                                            ],
+                                            value='all',
+                                            labelStyle={'display': 'inline-block'}
+                                        ),
+                                        dcc.Dropdown(
+                                            id='well_types_2',
+                                            options=sensitivity_options,
+                                            multi=True,
+                                            value=[],
+                                        ),
                                     ],
-                                    value='all',
-                                    labelStyle={'display': 'inline-block'}
+                                    className='six columns'
                                 ),
-                                dcc.Dropdown(
-                                    id='well_types_2',
-                                    options=sensitivity_options,
-                                    multi=True,
-                                    value=[],
+                                html.Div(
+                                    [
+                                        html.P('Filter by sector:'),
+                                        dcc.RadioItems(
+                                            id='sector-selector',
+                                            options=[
+                                                {'label': 'All ', 'value': 'all'},
+                                                {'label': 'Productive only ', 'value': 'productive'},
+                                                {'label': 'Customize ', 'value': 'custom'}
+                                            ],
+                                            value='all',
+                                            labelStyle={'display': 'inline-block'}
+                                        ),
+                                        dcc.Dropdown(
+                                            id='well_types',
+                                            options=sector_options,
+                                            multi=True,
+                                            value=[],
+                                        ),
+                                    ],
+                                    className='six columns'
                                 ),
                             ],
-                            className='six columns'
+                            className='row'
                         ),
                         html.Div(
                             [
-                                html.P('Filter by sector:'),
-                                dcc.RadioItems(
-                                    id='sector-selector',
-                                    options=[
-                                        {'label': 'All ', 'value': 'all'},
-                                        {'label': 'Productive only ', 'value': 'productive'},
-                                        {'label': 'Customize ', 'value': 'custom'}
-                                    ],
-                                    value='all',
-                                    labelStyle={'display': 'inline-block'}
-                                ),
-                                dcc.Dropdown(
-                                    id='well_types',
-                                    options=sector_options,
-                                    multi=True,
-                                    value=[],
+                                html.P('Filter by data breach date:'),
+                                dcc.RangeSlider(
+                                    id='year-slider',
+                                    min=2004,
+                                    max=2018,
+                                    value=[2004, 2018],
+                                    marks={i: i for i in range(2004, 2018+1)},
                                 ),
                             ],
-                            className='six columns'
+                            style={'margin-top': '20'},
+                            className='row'
                         ),
-                        html.Div(
-                        [
-                            html.P('Filter by data breach date:'),
-                            dcc.RangeSlider(
-                                id='year-slider',
-                                min=2004,
-                                max=2018,
-                                value=[2004, 2018],
-                                marks={i: i for i in range(2004, 2018+1)},
-                            ),
-                        ],
-                        style={'margin-top': '20'}
-                    ),
-                ],
-                className='row'
+                    ],
                 )
             ],
             className='container'
