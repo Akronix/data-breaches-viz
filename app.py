@@ -42,7 +42,14 @@ methods_list_names = ['All', 'Hacked', 'oops!', 'Poor security', 'Lost device', 
 methods_list_values = ['all', 'hacked', 'oops!', 'poor security', 'lost device ', 'inside job']
 methods_dict = { value: name for name, value in zip(methods_list_names, methods_list_values) }
 method_options = [ { 'label': label, 'value': value} for label, value in zip(methods_list_names, methods_list_values) ]
-
+method_color = {
+    'all': '#0C0F25',
+    'hacked' : '#903553',
+    'oops!' : '#A2AA39',
+    'poor security' : '#562972',
+    'lost device ': '#EFAD24',
+    'inside job': '#FFBAD2',
+}
 
 sector_list = ['web', 'retail', 'transport', 'government', 'telecoms',
         'app', 'healthcare', 'tech', 'financial', 'legal', 'gaming', 'media',
@@ -251,6 +258,9 @@ def make_main_figure(methods, years, selected_sensitivities, selected_sector):
             y=lost_data,
             text=entities,
             name='Records lost',
+            marker=dict(
+                color = method_color[method],
+            )
         );
 
         layout = {
