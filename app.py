@@ -81,7 +81,7 @@ app.layout = html.Div(
                     id='methods-selector',
                     options=method_options,
                     multi=True,
-                    value=[]
+                    value=['all']
                 ),
             ],
             className='container'
@@ -119,21 +119,11 @@ app.layout = html.Div(
                                 html.Div(
                                     [
                                         html.P('Filter by data sensitivity:'),
-                                        dcc.RadioItems(
-                                            id='data-sensitivity-selector',
-                                            options=[
-                                                {'label': 'All ', 'value': 'all'},
-                                                {'label': 'Active only ', 'value': 'active'},
-                                                {'label': 'Customize ', 'value': 'custom'}
-                                            ],
-                                            value='all',
-                                            labelStyle={'display': 'inline-block'}
-                                        ),
                                         dcc.Dropdown(
-                                            id='well_types_2',
+                                            id='data-sensitivity-select',
                                             options=sensitivity_options,
                                             multi=True,
-                                            value=[],
+                                            value=[1,2,3,4,5],
                                         ),
                                     ],
                                     className='six columns'
@@ -211,19 +201,30 @@ def update_year_text(year_slider):
     return "{} | {}".format(year_slider[0], year_slider[1])
 
 
-@app.callback(Output('graphs', 'children'),
-              [Input('methods-selector', 'value'),
-              Input('year-slider', 'value')]
-              )
-def make_main_figure(methods, years):
+@app.callback(
+            Output('graphs', 'children'),
+            [
+                Input('methods-selector', 'value'),
+                Input('year-slider', 'value'),
+                Input('data-sensitivity-select', 'value'),
+            ]
+    )
+def make_main_figure(methods, years, selected_sensitivity):
+
+    # do a local copy of the data to not modify global data var
+    local_data = data.copy(deep=True)
 
     # filter data
 
     # years slider
-    print (years)
+    print(f'Years selected: {years}')
     list_years_set = list(range(years[0], years[1] + 1))
-    local_data = data[data['YEAR'].isin(list_years_set)]
+    local_data = local_data[local_data['YEAR'].isin(list_years_set)]
 
+    # data sensitivity dropdown
+    print(f'Data sensitivity selected: {selected_sensitivity}')
+    if selected_sensitivity != sensitivity_options:
+        local_data = local_data [ local_data['DATA SENSITIVITY'].apply( lambda sensitivity: sensitivity in selected_sensitivity ) ]
 
 
     # methods graphs
