@@ -29,6 +29,8 @@ server = app.server
 
 ### Load data ###
 data = pd.read_csv('breaches.csv', thousands= ',')
+# sort data by records lost
+#~ data = data['records lost'].sort_values(ascending=False)
 
 
 ### selector options ###
@@ -195,14 +197,13 @@ def make_main_figure(years):
     list_years_set = list(range(years[0], years[1] + 1))
     local_data = data[data['YEAR'].isin(list_years_set)]
 
-    #~ sorted_lost_data = data['records lost'].sort_values(ascending=False)
-    sorted_lost_data = local_data['records lost']
+    lost_data = local_data['records lost']
     entities = local_data['Entity']
 
     trace = dict(
         type='bar',
         x=data.index,
-        y=sorted_lost_data,
+        y=lost_data,
         text=entities,
         name='Records lost',
     );
