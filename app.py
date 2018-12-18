@@ -32,6 +32,7 @@ data = pd.read_csv('breaches_clean.csv', thousands= ',')
 data['SECTOR'] = data['SECTOR'].apply(lambda sector: sector.split(', ')) # create list of sectors
 # sort data by records lost
 #~ data = data['records lost'].sort_values(ascending=False)
+data.sort_values(by='records lost', inplace=True, ascending=False)
 
 
 ### selector options ###
@@ -45,7 +46,7 @@ method_options = [ { 'label': label, 'value': value} for label, value in zip(met
 method_color = {
     'all': '#0C0F25',
     'hacked' : '#903553',
-    'oops!' : '#A2AA39',
+    'oops!' : '#97BD5B',
     'poor security' : '#562972',
     'lost device ': '#EFAD24',
     'inside job': '#FFBAD2',
@@ -254,7 +255,7 @@ def make_main_figure(methods, years, selected_sensitivities, selected_sector):
 
         trace = dict(
             type='bar',
-            x=data.index,
+            x=len(lost_data),
             y=lost_data,
             text=entities,
             name='Records lost',
