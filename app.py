@@ -28,7 +28,7 @@ server = app.server
 
 
 ### Load data ###
-data = pd.read_csv('breaches.csv', thousands= ',')
+data = pd.read_csv('breaches_clean.csv', thousands= ',')
 # sort data by records lost
 #~ data = data['records lost'].sort_values(ascending=False)
 
@@ -36,6 +36,12 @@ data = pd.read_csv('breaches.csv', thousands= ',')
 ### selector options ###
 #~ sector_options = list(df['SECTOR'].unique())
 #~ sensitivity_options = list(df['DATA SENSITIVITY'].unique())
+
+methods_list_names = ['All', 'Hacked', 'oops!', 'Poor security', 'Lost device', 'Inside job']
+methods_list_values = ['all', 'hacked', 'oops!', 'poor security', 'lost device ', 'inside job']
+methods_dict = { value: name for name, value in zip(methods_list_names, methods_list_values) }
+method_options = [ { 'label': label, 'value': value} for label, value in zip(methods_list_names, methods_list_values) ]
+
 
 sector_options = [
 
@@ -69,8 +75,8 @@ app.layout = html.Div(
             [
                 html.P('Select methods used for the data breach:'),
                 dcc.Dropdown(
-                    id='methods_selector',
-                    options=[],
+                    id='methods-selector',
+                    options=method_options,
                     multi=True,
                     value=[]
                 ),
@@ -171,64 +177,98 @@ app.layout = html.Div(
 
         html.Hr(),
 
-        html.Div(
-            [
-                dcc.Graph(id='main-graph')
-            ],
-        )
+        html.Div(id='graphs')
     ]
 )
+
+
+### Helpers ###
+def get_data_for_method (method: str, local_data: pd.DataFrame):
+    if method == 'all':
+        return local_data
+    else:
+        print(method)
+        if method in methods_list_values: # Just in case
+            return local_data[local_data['METHOD'] == method]
+        else:
+            raise Exception('method not found')
 
 
 ### Callbacks ###
 # Slider -> year text
 @app.callback(Output('years-text', 'children'),
-              [Input('year-slider', 'value')])
+              [Input('year-slider', 'value')]
+              )
 def update_year_text(year_slider):
     return "{} | {}".format(year_slider[0], year_slider[1])
 
 
-@app.callback(Output('main-graph', 'figure'),
-              [Input('year-slider', 'value')]
-            )
-def make_main_figure(years):
+@app.callback(Output('graphs', 'children'),
+              [Input('methods-selector', 'value'),
+              Input('year-slider', 'value')]
+              )
+def make_main_figure(methods, years):
 
+    # filter data
+
+    # years slider
     print (years)
     list_years_set = list(range(years[0], years[1] + 1))
     local_data = data[data['YEAR'].isin(list_years_set)]
 
-    lost_data = local_data['records lost']
-    entities = local_data['Entity']
 
-    trace = dict(
-        type='bar',
-        x=data.index,
-        y=lost_data,
-        text=entities,
-        name='Records lost',
-    );
 
-    layout = {
-        'title': 'Records lost',
-        'xaxis': {'title': 'Entity',
-                    'titlefont': dict(
-                        family='Courier New, monospace',
-                        size=18,
-                        color='#7f7f7f'
-                )
-        },
-        'yaxis': {'title': 'Records lost',
-                    'titlefont': dict(
-                        family='Courier New, monospace',
-                        size=18,
-                        color='#7f7f7f'
-                )
+    # methods graphs
+    # print one figure for each method selected
+
+    graphs = []
+    print(f'Methods selected: {methods}')
+    for method in methods:
+        method_name = methods_dict[method]
+        method_data = get_data_for_method(method, local_data)
+
+        lost_data = method_data['records lost']
+        entities = method_data['Entity']
+
+        trace = dict(
+            type='bar',
+            x=data.index,
+            y=lost_data,
+            text=entities,
+            name='Records lost',
+        );
+
+        layout = {
+            'title': f'Records lost by "{method_name}" method(s)',
+
+            'xaxis': {'title': 'Entity',
+                        'titlefont': dict(
+                            family='Courier New, monospace',
+                            size=18,
+                            color='#7f7f7f'
+                    )
+            },
+            'yaxis': {'title': 'Records lost',
+                        'titlefont': dict(
+                            family='Courier New, monospace',
+                            size=18,
+                            color='#7f7f7f'
+                    )
+            }
         }
-    }
 
-    figure = dict(data=[trace], layout=layout)
+        figure = dict(data=[trace], layout=layout)
+        graphs.append(dcc.Graph(
+                        id=f"graph-{method_name}",
+                        figure=figure,
+                        config={
+                            'displaylogo': False,
+                            'showLink': False,
+                            'modeBarButtonsToRemove': ['sendDataToCloud']
+                        }
+                    ))
 
-    return figure
+    return graphs
 
 
 # Selectors -> main graph
