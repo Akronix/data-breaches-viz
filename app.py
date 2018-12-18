@@ -97,28 +97,6 @@ app.layout = html.Div(
             className='container'
         ),
 
-        #~ html.Div(
-            #~ [
-                #~ html.H5(
-                    #~ '',
-                    #~ id='breaches_text',
-                    #~ className='two columns'
-                #~ ),
-                #~ html.H5(
-                    #~ '',
-                    #~ id='companies_text',
-                    #~ className='eight columns',
-                    #~ style={'text-align': 'center'}
-                #~ ),
-                #~ html.H5(
-                    #~ '',
-                    #~ id='years-text',
-                    #~ className='two columns',
-                    #~ style={'text-align': 'right'}
-                #~ ),
-            #~ ],
-            #~ className='row container'
-        #~ ),
         html.Div(
             [
                 html.P('Filters:'),
@@ -189,7 +167,6 @@ def get_data_for_method (method: str, local_data: pd.DataFrame):
     if method == 'all':
         return local_data
     else:
-        print(method)
         if method in methods_list_values: # Just in case
             return local_data[local_data['METHOD'] == method]
         else:
@@ -221,14 +198,8 @@ def method_header(method_name: str, records_lost_no: int, companies_affected_no:
 
 
 ### Callbacks ###
-# Slider -> year text
-#~ @app.callback(Output('years-text', 'children'),
-              #~ [Input('year-slider', 'value')]
-              #~ )
-#~ def update_year_text(year_slider):
-    #~ return "{} | {}".format(year_slider[0], year_slider[1])
 
-
+# Selectors -> main graphs
 @app.callback(
             Output('graphs', 'children'),
             [
@@ -325,55 +296,6 @@ def make_main_figure(methods, years, selected_sensitivities, selected_sector):
 
 
     return graphs
-
-
-# Selectors -> main graph
-#~ @app.callback(Output('main_graph', 'figure'),
-              #~ [Input('well_statuses', 'value'),
-               #~ Input('well_types', 'value'),
-               #~ Input('year_slider', 'value')],
-              #~ [State('lock_selector', 'values'),
-               #~ State('main_graph', 'relayoutData')])
-#~ def make_main_figure(well_statuses, well_types, year_slider,
-                     #~ selector, main_graph_layout):
-
-    #~ dff = filter_dataframe(df, well_statuses, well_types, year_slider)
-
-    #~ traces = []
-    #~ for well_type, dfff in dff.groupby('Well_Type'):
-        #~ trace = dict(
-            #~ type='scattermapbox',
-            #~ lon=dfff['Surface_Longitude'],
-            #~ lat=dfff['Surface_latitude'],
-            #~ text=dfff['Well_Name'],
-            #~ customdata=dfff['API_WellNo'],
-            #~ name=WELL_TYPES[well_type],
-            #~ marker=dict(
-                #~ size=4,
-                #~ opacity=0.6,
-                #~ color=WELL_COLORS[well_type]
-            #~ )
-        #~ )
-        #~ traces.append(trace)
-
-    #~ if (main_graph_layout is not None and 'locked' in selector):
-
-        #~ lon = float(main_graph_layout['mapbox']['center']['lon'])
-        #~ lat = float(main_graph_layout['mapbox']['center']['lat'])
-        #~ zoom = float(main_graph_layout['mapbox']['zoom'])
-        #~ layout['mapbox']['center']['lon'] = lon
-        #~ layout['mapbox']['center']['lat'] = lat
-        #~ layout['mapbox']['zoom'] = zoom
-    #~ else:
-        #~ lon = -78.05
-        #~ lat = 42.54
-        #~ zoom = 7
-
-    #~ figure = dict(data=traces, layout=layout)
-    #~ return figure
-
-
-
 
 
 if __name__ == '__main__':
