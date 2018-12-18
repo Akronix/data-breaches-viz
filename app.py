@@ -93,28 +93,28 @@ app.layout = html.Div(
             className='container'
         ),
 
-        html.Div(
-            [
-                html.H5(
-                    '',
-                    id='breaches_text',
-                    className='two columns'
-                ),
-                html.H5(
-                    '',
-                    id='companies_text',
-                    className='eight columns',
-                    style={'text-align': 'center'}
-                ),
-                html.H5(
-                    '',
-                    id='years-text',
-                    className='two columns',
-                    style={'text-align': 'right'}
-                ),
-            ],
-            className='row container'
-        ),
+        #~ html.Div(
+            #~ [
+                #~ html.H5(
+                    #~ '',
+                    #~ id='breaches_text',
+                    #~ className='two columns'
+                #~ ),
+                #~ html.H5(
+                    #~ '',
+                    #~ id='companies_text',
+                    #~ className='eight columns',
+                    #~ style={'text-align': 'center'}
+                #~ ),
+                #~ html.H5(
+                    #~ '',
+                    #~ id='years-text',
+                    #~ className='two columns',
+                    #~ style={'text-align': 'right'}
+                #~ ),
+            #~ ],
+            #~ className='row container'
+        #~ ),
         html.Div(
             [
                 html.P('Filters:'),
@@ -163,13 +163,14 @@ app.layout = html.Div(
                                     marks={i: i for i in range(2004, 2018+1)},
                                 ),
                             ],
-                            style={'margin-top': '20'},
-                            className='row'
+                            className='row',
+                            style={'margin-top': '20'}
                         ),
                     ],
                 )
             ],
-            className='container'
+            className='container',
+            style={'margin-top': '20'},
         ),
 
         html.Hr(),
@@ -193,11 +194,11 @@ def get_data_for_method (method: str, local_data: pd.DataFrame):
 
 ### Callbacks ###
 # Slider -> year text
-@app.callback(Output('years-text', 'children'),
-              [Input('year-slider', 'value')]
-              )
-def update_year_text(year_slider):
-    return "{} | {}".format(year_slider[0], year_slider[1])
+#~ @app.callback(Output('years-text', 'children'),
+              #~ [Input('year-slider', 'value')]
+              #~ )
+#~ def update_year_text(year_slider):
+    #~ return "{} | {}".format(year_slider[0], year_slider[1])
 
 
 @app.callback(
