@@ -85,7 +85,9 @@ app.layout = html.Div(
                     id='methods-selector',
                     options=method_options,
                     multi=True,
-                    value=['all']
+                    value=['all'],
+                    placeholder='Select method...',
+                    clearable=False
                 ),
             ],
             className='container'
@@ -128,6 +130,7 @@ app.layout = html.Div(
                                             options=sensitivity_options,
                                             multi=True,
                                             value=[1,2,3,4,5],
+                                            placeholder='Select sensitivity options...',
                                         ),
                                     ],
                                     className='six columns'
@@ -140,6 +143,8 @@ app.layout = html.Div(
                                             options=sector_options,
                                             multi=False,
                                             value='all',
+                                            placeholder='Select sector...',
+                                            clearable=False
                                         ),
                                     ],
                                     className='six columns'
