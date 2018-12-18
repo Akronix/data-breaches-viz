@@ -23,6 +23,7 @@ import pandas as pd
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css'] # default styles for Dash apps
 
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
+app.title = 'Data breaches Vis'
 app.scripts.config.serve_locally = True
 server = app.server
 
