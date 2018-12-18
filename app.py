@@ -43,9 +43,15 @@ methods_dict = { value: name for name, value in zip(methods_list_names, methods_
 method_options = [ { 'label': label, 'value': value} for label, value in zip(methods_list_names, methods_list_values) ]
 
 
-sector_options = [
-
-]
+sector_list = ['web', 'retail', 'transport', 'government', 'telecoms',
+        'app', 'healthcare', 'tech', 'financial', 'legal', 'gaming', 'media',
+        'tech, app', 'academic', 'web, tech', 'energy', 'tech, web',
+        'government, healthcare', 'web, military', 'tech, retail',
+        'military', 'military, healthcare', 'web, gaming',
+        'government, military'] # all options in data
+sector_list.sort() #  Sort alphabetically
+sector_list.insert(0, 'all') # add 'all' options at the front
+sector_options = [ { 'label': sector, 'value': sector} for sector in sector_list ]
 
 
 sensitivity_options = [
@@ -131,21 +137,11 @@ app.layout = html.Div(
                                 html.Div(
                                     [
                                         html.P('Filter by sector:'),
-                                        dcc.RadioItems(
-                                            id='sector-selector',
-                                            options=[
-                                                {'label': 'All ', 'value': 'all'},
-                                                {'label': 'Productive only ', 'value': 'productive'},
-                                                {'label': 'Customize ', 'value': 'custom'}
-                                            ],
-                                            value='all',
-                                            labelStyle={'display': 'inline-block'}
-                                        ),
                                         dcc.Dropdown(
-                                            id='well_types',
+                                            id='sector-select',
                                             options=sector_options,
-                                            multi=True,
-                                            value=[],
+                                            multi=False,
+                                            value='all',
                                         ),
                                     ],
                                     className='six columns'
@@ -207,9 +203,10 @@ def update_year_text(year_slider):
                 Input('methods-selector', 'value'),
                 Input('year-slider', 'value'),
                 Input('data-sensitivity-select', 'value'),
+                Input('sector-select', 'value'),
             ]
     )
-def make_main_figure(methods, years, selected_sensitivity):
+def make_main_figure(methods, years, selected_sensitivity, selected_sector):
 
     # do a local copy of the data to not modify global data var
     local_data = data.copy(deep=True)
@@ -225,6 +222,11 @@ def make_main_figure(methods, years, selected_sensitivity):
     print(f'Data sensitivity selected: {selected_sensitivity}')
     if selected_sensitivity != sensitivity_options:
         local_data = local_data [ local_data['DATA SENSITIVITY'].apply( lambda sensitivity: sensitivity in selected_sensitivity ) ]
+
+    # sector dropdown selection
+    print(f'Sector selected: {selected_sector}')
+    if selected_sector != 'all':
+        local_data = local_data [ local_data['SECTOR'] == selected_sector ]
 
 
     # methods graphs
