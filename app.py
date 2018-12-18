@@ -69,10 +69,6 @@ sensitivity_options = [
 ]
 
 
-print(sector_options)
-print(sensitivity_options)
-
-
 ### Define app layout ###
 app.layout = html.Div(
     [
@@ -209,7 +205,7 @@ def method_header(method_name: str, records_lost_no: int, companies_affected_no:
                     style={'text-align': 'center'}
                 ),
                 html.H5(
-                    [html.Strong(records_lost_no),' records lost.'],
+                    [html.Strong("{:,}".format(int(records_lost_no))),' records lost.'],
                     className='four columns',
                     style={'text-align': 'center'}
                 ),
