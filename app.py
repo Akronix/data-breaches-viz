@@ -245,6 +245,8 @@ def make_main_figure(methods, years, selected_sensitivities, selected_sector):
         lost_data = method_data['records lost']
         entities = method_data['Entity']
 
+        #~ range_to_show = min(len(lost_data), 50) # Start zoomed if too many companies
+
         trace = dict(
             type='bar',
             x=len(lost_data),
@@ -264,7 +266,8 @@ def make_main_figure(methods, years, selected_sensitivities, selected_sector):
                             family='Courier New, monospace',
                             size=18,
                             color='#7f7f7f'
-                    )
+                    ),
+                    #~ 'range': [-1, range_to_show],
             },
             'yaxis': {'title': 'Records lost',
                         'titlefont': dict(
@@ -280,9 +283,9 @@ def make_main_figure(methods, years, selected_sensitivities, selected_sector):
                         id=f"graph-{method_name}",
                         figure=figure,
                         config={
-                            'displaylogo': False,
+                            'hovermode':  "y",
                             'showLink': False,
-                            'modeBarButtonsToRemove': ['sendDataToCloud']
+                            'modeBarButtonsToRemove': ['sendDataToCloud', 'lasso2d', 'select2d']
                         }
                     )
 

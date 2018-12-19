@@ -15,3 +15,8 @@ Data extracted from https://docs.google.com/spreadsheets/d/1i0oIJJMRG-7t1GT-mr4s
 
 ### Install instructions
 Simply run: `pip3 install -r requirements.txt`
+
+### Run instructions
+```python app.py```
+
+then open your browser at: http://127.0.0.1:5000/
