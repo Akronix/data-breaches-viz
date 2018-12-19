@@ -81,6 +81,7 @@ app.layout = html.Div(
                     id='title'
                 ),
             ],
+            style = {'textAlign': 'center'},
             className='row'
         ),
         html.Div(
